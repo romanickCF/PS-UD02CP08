@@ -2,17 +2,24 @@
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 void main() throws InterruptedException {
 
-    Invernadero invernadero = new Invernadero();
-    List<Integer> temperaturas = new ArrayList<>();
 
-    Sensor sensor = new Sensor(invernadero);
-    Controlador controlador = new Controlador(invernadero);
+        final int UMBRAL = 28;
+        final int MEDICIONES = 12;
 
-    sensor.start();
-    controlador.start();
+        System.out.println("=== Monitorizacion ambiental del invernadero (productor/consumidor) ===");
+        System.out.println("Espera activa: el sensor no sobrescribe hasta que el controlador ha leido.");
+        System.out.println("Umbral de ventilacion: " + UMBRAL + "°C | mediciones: " + MEDICIONES + "\n");
 
-    sensor.join();
-    controlador.join();
+        Invernadero invernadero = new Invernadero();
+        Sensor sensor = new Sensor(invernadero, MEDICIONES);
+        Controlador controlador = new Controlador(invernadero, UMBRAL);
+
+        sensor.start();
+        controlador.start();
+
+        sensor.join();
+        controlador.join();
+    }
 
 
-}
+

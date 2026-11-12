@@ -4,42 +4,44 @@ public class Invernadero {
 
 
     Random rand = new Random();
-    int temperatura;
-    volatile boolean hayDato;
-    static final int LIMITE_TEMPERATURA = 28;
-    static final int LIMITE_MEDCIIONES =12 ;
-    int mediciones= 0;
-    volatile boolean cerrado = mediciones>LIMITE_MEDCIIONES ;
+    volatile int temperatura;
+    volatile boolean disponible;
+    volatile boolean cerrado;
 
-    public Invernadero() {
-        temperatura = rand.nextInt(16 )+20 ;
+
+    public void publicar(int valor) {
+        while (disponible) {
+            Thread.onSpinWait();
+        }
+        temperatura = valor;
+        disponible = true;
     }
 
-    public int getTemperatura() {
-        return temperatura;
+    public boolean esperarMedicion() {
+        boolean avisado = false;
+        while (true) {
+            boolean fin = cerrado;      // se lee ANTES que 'disponible' para no perder la ultima medicion
+            if (disponible) return true;
+            if (fin) return false;
+            if (!avisado) {
+                System.out.println("[CONTROL] esperando medicion...");
+                avisado = true;
+            }
+            Thread.onSpinWait();
+        }
     }
 
-    public void publicarTemperatura(int n){
-        System.out.println("[SENSOR] publica medicion "+ n+ ": "+temperatura +"ºC");
-        hayDato = true;
-        actualizarTemperatura();
-        mediciones++;
+    public int leer() {
+        int valor = temperatura;
+        disponible = false;
+        return valor;
     }
 
-    public  void leerTemperatura(int n){
-        System.out.println("[CONTROLADOR] lee medicion "+ n + ": "+temperatura +" -> "+ mensaje());
-        hayDato = false;
+    public void cerrar() {
+        cerrado = true;
     }
 
-    public String mensaje(){
-        boolean rangoNormal = temperatura<= LIMITE_TEMPERATURA;
 
-        return rangoNormal?"en rango normal, todo correcto":
-                "EXCEDE EL UMBRAL de 28º, VENTILACION ACTIVADA";
-    }
-    private void actualizarTemperatura(){
-        temperatura = rand.nextInt(16 )+20 ;
-    }
 
 
 }
