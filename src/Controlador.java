@@ -13,16 +13,15 @@ public class Controlador extends Thread {
 
     @Override
     public void run() {
-      while(!invernadero.hayDato){
+      while(!invernadero.cerrado){
+          while(!invernadero.hayDato){
+              Thread.yield();
+          }
+          invernadero.leerTemperatura(invernadero.temperatura);
+          invernadero.hayDato = false;
 
       }
 
     }
 
-    public String mensaje(){
-      boolean rangoNormal = invernadero.getTemperatura()< 28;
-
-      return rangoNormal?"en rango normal, todo correcto":
-              "EXCEDE EL UMBRAL de 28º, VENTILACION ACTIVADA";
-    }
 }

@@ -14,17 +14,14 @@ public class Sensor  extends Thread{
 
     @Override
     public void run() {
-        while (invernadero.hayDato){
+            while(!invernadero.cerrado){
+                while (invernadero.hayDato){
+                    Thread.yield();
+                }
+                invernadero.publicarTemperatura(i);
+                i++;
+            }
 
-        }
-        invernadero.publicarTemperatura(i);
-        i++;
-
-    }
-
-    private int medirTemperatura(List<Integer> mediciones){
-
-            mediciones.add(invernadero.getTemperatura());
-            return invernadero.getTemperatura();
+        System.out.println("Buffer Cerrado, no hay nada que medir");
     }
 }

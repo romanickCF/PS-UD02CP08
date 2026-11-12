@@ -6,8 +6,10 @@ public class Invernadero {
     Random rand = new Random();
     int temperatura;
     volatile boolean hayDato;
-    volatile boolean cerrado;
     static final int LIMITE_TEMPERATURA = 28;
+    static final int LIMITE_MEDCIIONES =12 ;
+    int mediciones= 0;
+    volatile boolean cerrado = mediciones>LIMITE_MEDCIIONES ;
 
     public Invernadero() {
         temperatura = rand.nextInt(16 )+20 ;
@@ -18,12 +20,14 @@ public class Invernadero {
     }
 
     public void publicarTemperatura(int n){
-        System.out.println("[SENSOR] publica medicion"+ n+ ": "+temperatura +"ºC");
+        System.out.println("[SENSOR] publica medicion "+ n+ ": "+temperatura +"ºC");
         hayDato = true;
+        actualizarTemperatura();
+        mediciones++;
     }
 
     public  void leerTemperatura(int n){
-        System.out.println("lee medicion "+ n + ": "+temperatura +" -> "+ mensaje());
+        System.out.println("[CONTROLADOR] lee medicion "+ n + ": "+temperatura +" -> "+ mensaje());
         hayDato = false;
     }
 
@@ -32,6 +36,9 @@ public class Invernadero {
 
         return rangoNormal?"en rango normal, todo correcto":
                 "EXCEDE EL UMBRAL de 28º, VENTILACION ACTIVADA";
+    }
+    private void actualizarTemperatura(){
+        temperatura = rand.nextInt(16 )+20 ;
     }
 
 
