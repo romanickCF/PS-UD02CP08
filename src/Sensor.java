@@ -1,4 +1,4 @@
-import java.util.List;
+
 import java.util.Random;
 
 public class Sensor  extends Thread{
@@ -8,7 +8,6 @@ public class Sensor  extends Thread{
     private final Random random = new Random();
 
     public Sensor(Invernadero invernadero, int mediciones) {
-        super("Sensor");
         this.invernadero = invernadero;
         this.mediciones = mediciones;
     }
@@ -17,8 +16,8 @@ public class Sensor  extends Thread{
     public void run() {
         try {
             for (int i = 1; i <= mediciones; i++) {
-                Thread.sleep(100 + random.nextInt(200));   // periodo de medicion
-                int temp = 15 + random.nextInt(21);        // entero entre 15 y 35
+                Thread.sleep(100 + random.nextInt(200));
+                int temp = 15 + random.nextInt(21);
                 invernadero.publicar(temp);
                 System.out.printf("[SENSOR]  publica medicion %02d: %d°C%n", i, temp);
             }

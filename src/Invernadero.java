@@ -1,9 +1,7 @@
-import java.util.Random;
+
 
 public class Invernadero {
 
-
-    Random rand = new Random();
     volatile int temperatura;
     volatile boolean disponible;
     volatile boolean cerrado;
@@ -20,7 +18,7 @@ public class Invernadero {
     public boolean esperarMedicion() {
         boolean avisado = false;
         while (true) {
-            boolean fin = cerrado;      // se lee ANTES que 'disponible' para no perder la ultima medicion
+            boolean fin = cerrado;
             if (disponible) return true;
             if (fin) return false;
             if (!avisado) {

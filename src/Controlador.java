@@ -1,5 +1,4 @@
-import java.io.InputStream;
-import java.util.List;
+
 import java.util.Random;
 
 public class Controlador extends Thread {
@@ -9,7 +8,6 @@ public class Controlador extends Thread {
     private final Random random = new Random();
 
     public Controlador(Invernadero invernadero, int umbral) {
-        super("Controlador");
         this.invernadero = invernadero;
         this.umbral = umbral;
     }
